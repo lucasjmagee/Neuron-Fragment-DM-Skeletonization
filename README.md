@@ -1,4 +1,4 @@
-Full Brain Neuron Fragment 2D Discrete Morse Graph Reconstruction Python Package
+**Full Brain Neuron Fragment 2D Discrete Morse Graph Reconstruction Python Package**
 
 I. Package Description
 
