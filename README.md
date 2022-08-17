@@ -7,9 +7,8 @@ DiMo2d is a python package meant for executing the discrete Morse graph reconstr
   * [Compiling Code](#compiling-code)
   * [MATLAB Scripts](#matlab-scripts)
 * [DiMo2D Functions](#dimo2d-functions)
-* [Non-Python Code](#non-python-code)
-  * [Separate Programs](#separate-programs)
-  * [MATLAB Scripts](#matlab-scripts)
+* [Separate Programs](#separate-programs)
+* [MATLAB Scripts](#matlab-scripts)
 * [Example Use of Pipeline](#example-use-of-pipeline)
 
 ## Installation Instructions
@@ -180,11 +179,45 @@ Example:
     >dm.postprocess_graphs(morse_dir, 0, 64)
     >dm.write_vtp_graph(morse_dir, vtp_filename, 0, 64)
 
-## Non-Python Code
+## Separate Programs
 
-### Separate Programs
+## MATLAB Scripts
 
-### MATLAB Scripts
+### save_image_data.m
+
+#### Description
+
+Creates DIPHA input file for all subregions
+
+#### Python Function
+
+DiMo2d.compute_persistence_single_channel
+
+#### Input
+
+- input_filename - input path to image
+- filename - path dipha input file will be written to
+
+#### Output
+DIPHA input file for an image
+
+### load_persistence_diagram.m
+
+#### Description
+
+Converts DIPHA persistence diagram to .txt format for use by Discrete Morse Graph Reconstruction program
+
+#### Python Function
+		
+DiMo2d.compute_persistence_single_channel
+
+#### Input
+- input_filename - Persistence diagram output directly from DIPHA program (.bin format)
+- output_filename - filename for .txt format of persistence diagram
+
+#### Output
+
+Persistence Diagram in .txt format for each subregion
 
 ## Example Use of Pipeline
 
