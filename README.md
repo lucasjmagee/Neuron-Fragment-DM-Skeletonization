@@ -228,7 +228,8 @@ DiMo2d.generate_morse_graphs
 
 - vert_filename - file contain verts in domain
 - dipha_edge_filename - .txt format of edge persistence information
-- persistence threshold - persistence threshold for graph reconstruction algorithm
+- ve_persistence threshold - persistence threshold for negative edges
+- et_persistence threshold - persistence threshold for positive edges
 - output_dir - directory where output graph will be written
 
 #### Output
