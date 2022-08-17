@@ -181,6 +181,49 @@ Example:
 
 ## Separate Programs
 
+### Dipha Persistence Program (code/dipha-2d-thresh/build/dipha)
+
+#### Description
+
+Compute persistence diagram of likelihood image (only on regions with greater pixel value than 31, the likelihood minimum)
+
+#### Python Function
+
+DiMo2d.compute_persistence_single_channel
+
+#### Input
+- input_filename - path to DIPHA input file
+- output_filename - filename for traditional DIPHA program persistence diagram
+- edge_filename - filename for edge information - vertices, edge type (negative or positive), and persistence value
+- nx - x axis size of image
+- ny - y axis size of image
+
+#### Output:
+
+Binary file (edge_filename) contained persistence information for all edges
+
+### Discrete Morse Graph Reconstruction Program (code/dipha-output-2d-ve-et-thresh/a.out)
+
+#### Description
+
+Executes discrete Morse graph reconstruction algorithm
+
+#### Python Function
+
+DiMo2d.generate_morse_graphs
+
+#### Input
+
+- vert_filename - file contain verts in domain
+- dipha_edge_filename - .txt format of edge persistence information
+- persistence threshold - persistence threshold for graph reconstruction algorithm
+- output_dir - directory where output graph will be written
+
+#### Output
+
+Graph (dimo_vert.txt and dimo_edge.txt) written to output_dir
+
+
 ## MATLAB Scripts
 
 ### save_image_data.m
