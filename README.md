@@ -5,7 +5,12 @@ DiMo2d is a python package meant for executing the discrete Morse graph reconstr
   * [System Requirements](#system-requirements)
   * [Required Python Libraries](#required-python-libraries)
   * [Compiling Code](#compiling-code)
+  * [MATLAB Scripts](#matlab-scripts)
 * [DiMo2D Functions](#dimo2d-functions)
+* [Non-Python Code](#non-python-code)
+  * [Separate Programs](#separate-programs)
+  * [MATLAB Scripts](#matlab-scripts)
+* [Example Use of Pipeline](#example-use-of-pipeline)
 
 ## Installation Instructions
 ### System Requirements
@@ -33,6 +38,10 @@ Discrete Morse Graph Reconstruction Module
 
     > cd ./DiMo2d/code/dipha-output-2d-ve-et-thresh/
     > g++ ComputeGraphReconstruction.cpp
+    
+### MATLAB Scripts
+
+    > cp ./DiMo2d/code/matlab/* ./
 
 ## DiMo2d Functions
 
@@ -128,7 +137,7 @@ Format graphs of each slice to geojson and ready to post to CSHL webviewer
 
 Geojson ready to be posted to CSHL webviewer is written for each slice
 
-####Example:
+#### Example:
     
     >import DiMo2d as dm
 
@@ -171,4 +180,26 @@ Example:
     >dm.postprocess_graphs(morse_dir, 0, 64)
     >dm.write_vtp_graph(morse_dir, vtp_filename, 0, 64)
 
-##
+## Non-Python Code
+
+### Separate Programs
+
+### MATLAB Scripts
+
+## Example Use of Pipeline
+
+    > import DiMo2d as dm
+
+    >likelihood_dir = “data/likelihood/”
+    >binary_dir = “data/binary/”
+    >morse_dir = “results/likelihood-morse/”
+    >json_dir = “results/post_to_web/”
+    >ve_thresh = 0
+    >et_thresh = 64
+    >threads = 4
+    >dm.compute_persistence_single_channel(likelihood_dir, morse_dir, threads)
+    >dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64, threads)
+    >dm.postprocess_graphs(morse_dir, 0, 64, threads)
+    >dm.cshl_post_results(morse_dir, json_dir, 0, 64, threads)
+
+
