@@ -68,7 +68,6 @@ Each 2D slice will have its own subdirectory in output_dir named by slice name. 
     
 ![DiMo2d.compute_persistence_single_channel](images/compute-persistence-single-channel.png)
 
-
 ### DiMo2d.generate_morse_graphs(input_path, binary_dir, ve_persistence_threshold=0, et_persistence_threshold=64,  threads=1)
 
 #### Description
@@ -94,6 +93,8 @@ Morse Graph for each image with specified persistence thresholds
     > morse_dir = “results/likelihood-morse/”
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     > dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
+    
+![DiMo2d.compute_persistence_single_channel](images/cgenerate-morse-graphs.png)
 
 ### DiMo2d.postprocess_graphs(input_path, ve_persistence_threshold=0, et_persistence_threshold=64, threads=1)
 
