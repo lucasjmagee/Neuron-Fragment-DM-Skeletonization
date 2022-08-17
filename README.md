@@ -94,7 +94,7 @@ Morse Graph for each image with specified persistence thresholds
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     > dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
     
-![DiMo2d.compute_persistence_single_channel](images/cgenerate-morse-graphs.png)
+![DiMo2d.generate_morse_graphs](images/generate-morse-graphs.png)
 
 ### DiMo2d.postprocess_graphs(input_path, ve_persistence_threshold=0, et_persistence_threshold=64, threads=1)
 
@@ -120,6 +120,8 @@ Perform postprocessing of graph at specified thresholds of each image.
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     > dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
     > dm.postprocess_graphs(morse_dir, 0, 64)
+    
+![DiMo2d.postprocess_graphs](images/postprocess-graphs.png)
 
 ### DiMo2d.cshl_post_results(input_path, output_dir, ve_persistence_threshold=0, et_persistence_threshold=64, threads=1)
 
@@ -151,6 +153,8 @@ Geojson ready to be posted to CSHL webviewer is written for each slice
     >dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
     >dm.postprocess_graphs(morse_dir, 0, 64)
     >dm.cshl_post_results(morse_dir, json_dir, 0, 64)
+    
+![DiMo2d.cshl_post_results](images/post-results.png)
 
 ### DiMo2d.write_vtp_graph(input_dir, output_filename, ve_persistence_threshold=0, et_persistence_threshold=64)
 
@@ -188,7 +192,7 @@ Example:
 
 #### Description
 
-Compute persistence diagram of likelihood image (only on regions with greater pixel value than 31, the likelihood minimum)
+Compute persistence diagram of likelihood image (only on regions with greater pixel value than 31, the likelihood minimum).  The program is a modified version of the code found at (https://github.com/DIPHA/dipha).
 
 #### Python Function
 
@@ -204,6 +208,8 @@ DiMo2d.compute_persistence_single_channel
 #### Output:
 
 Binary file (edge_filename) contained persistence information for all edges
+
+![DIPHA](images/dipha-2d.png)
 
 ### Discrete Morse Graph Reconstruction Program (code/dipha-output-2d-ve-et-thresh/a.out)
 
@@ -226,8 +232,11 @@ DiMo2d.generate_morse_graphs
 
 Graph (dimo_vert.txt and dimo_edge.txt) written to output_dir
 
+![DM Graph Reconstruction](images/morse-2d.png)
 
 ## MATLAB Scripts
+
+The following matlab scripts were taken from (https://github.com/DIPHA/dipha).
 
 ### save_image_data.m
 
