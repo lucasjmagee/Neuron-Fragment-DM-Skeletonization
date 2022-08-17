@@ -185,6 +185,9 @@ Example:
     >dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
     >dm.postprocess_graphs(morse_dir, 0, 64)
     >dm.write_vtp_graph(morse_dir, vtp_filename, 0, 64)
+    
+
+![VTP](images/vtp.png)
 
 ## Separate Programs
 
