@@ -256,6 +256,8 @@ DiMo2d.compute_persistence_single_channel
 #### Output
 DIPHA input file for an image
 
+![Save Image Data](images/save-image-data.png)
+
 ### load_persistence_diagram.m
 
 #### Description
@@ -273,6 +275,8 @@ DiMo2d.compute_persistence_single_channel
 #### Output
 
 Persistence Diagram in .txt format for each subregion
+
+![Load Persistence Diagram](images/load-persistence-diagram.png)
 
 ## Example Use of Pipeline
 
