@@ -278,4 +278,4 @@ Persistence Diagram in .txt format for each subregion
     >dm.postprocess_graphs(morse_dir, 0, 64, threads)
     >dm.cshl_post_results(morse_dir, json_dir, 0, 64, threads)
 
-
+![Full Workflow](images/2d-full-workflow.png)
