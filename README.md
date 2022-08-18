@@ -246,7 +246,7 @@ The following matlab scripts were taken from (https://github.com/DIPHA/dipha).
 
 #### Description
 
-Creates DIPHA input file for all subregions
+Creates DIPHA input file for all likelihood images
 
 #### Python Function
 
@@ -278,7 +278,7 @@ DiMo2d.compute_persistence_single_channel
 
 #### Output
 
-Persistence Diagram in .txt format for each subregion
+Persistence Diagram in .txt format for each likelihood image
 
 ![Load Persistence Diagram](images/load-persistence-diagram.png)
 
