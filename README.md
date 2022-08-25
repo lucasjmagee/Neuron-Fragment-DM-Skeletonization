@@ -10,6 +10,7 @@ DiMo2d is a python package meant for executing the discrete Morse graph reconstr
 * [Separate Programs](#separate-programs)
 * [MATLAB Scripts](#matlab-scripts)
 * [Example Use of Pipeline](#example-use-of-pipeline)
+* [Test Data](#test-data)
 
 ## Installation Instructions
 ### System Requirements
@@ -299,3 +300,7 @@ Persistence Diagram in .txt format for each likelihood image
     >dm.cshl_post_results(morse_dir, json_dir, 0, 64, threads)
 
 ![Full Workflow](images/2d-full-workflow.png)
+
+## Test Data
+
+Included in the data folder is are two directorys - one containing the likelihood images and the other containing the binary segmentation images of DM++ on two PMD 1229 slice.  Results can be viewed here (http://www.braincircuits.org/viewer4/mouse/map/2293).  The slices included are 0156 and 0156.
