@@ -72,7 +72,7 @@ Discrete Morse Graph Reconstruction Module
 
 #### Description
 
-For each likelihood image, compute persistence using DIPHA program. Persistence is only computed on edges with vertice function values greater than 31, DM++ minimum likelihood pixel value
+The first step of compute DM graph reconstruction to compute the persistence diagrams of each likelihood image. This packages uses a modified version of the DIPHA software for this computation. DIPHA takes specifically formatted input file. After generating the input files for the dipha program for each image (DiMo2d.write_dipha_persistence_input) this function will call the DIPHA program to compute the persistence diagram for each image, and convert the output to a format readable by the DM graph reconstruction program.
 
 #### Input
 - input_dir - Directory containing stack of DM++ likelihood output tifs
