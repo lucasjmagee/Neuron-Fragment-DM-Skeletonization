@@ -1,6 +1,7 @@
 # Full Brain Neuron Fragment 2D Discrete Morse Graph Reconstruction Python Package
 DiMo2d is a python package meant for executing the discrete Morse graph reconstruction algorithm on the DM++ likelihood outputs of 2D neuron images. The package includes functions which allows users to compute persistence diagrams, generate a discrete Morse graph reconstruction, postprocess the graph reconstruction to capture neuronal fragments, and output the graphs to different formats for each image.
 
+* [Introduction](#introduction)
 * [Installation Intructions](#installation-instructions)
   * [System Requirements](#system-requirements)
   * [Required Python Libraries](#required-python-libraries)
@@ -11,6 +12,14 @@ DiMo2d is a python package meant for executing the discrete Morse graph reconstr
 * [MATLAB Scripts](#matlab-scripts)
 * [Example Use of Pipeline](#example-use-of-pipeline)
 * [Test Data](#test-data)
+
+## Introduction
+
+DiMo2d is a python package (with underlying matlab functions and c++ libraries) that can be extract in-plane neuronal fragments for process detection outputs of mouse brain image stacks.  There are functions for computing persistence computing persistence diagram for each process detection likelihood output image (required for computing DM graph reconstruction, but could also be of independent interest), computing DM graph reconstruction for image, postprocessing graph of each image to extract fragments, and writing graphs to various formats, such as geojson to be posted to CSHL brain viewer or .vtp format to be visualize by applications such as paraview (https://www.paraview.org/).
+
+DM graph reconstruction is a methodology used to extract true underlying graph structure behind noisy input data. The input for the algorithm is a density function defined on a triangulation, and the output graph is the mountain ridges of the input density function. For mouse brain process detection images, the density function used is simply the pixel values. The mountain ridges of the density function do an excellent job of capturing the neuronal branches in each image. After some postprocessing, the graph is able to extract individual neuron fragments in an image.  Applying to a full mouse brain image stack allows to capture all fragments in mouse brain projected into 2D planes.
+
+This package was designed to be an intergral part of the pipeline to extract individual neurons from sparse mouse brain image stacks (images are very far apart compared to inplane pixels). While the pipeline will output a graph capture all neuronal fragments in each plane, further methodology for tying together fragments across planes is required.
 
 ## Installation Instructions
 ### System Requirements
