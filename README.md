@@ -96,7 +96,7 @@ Each 2D slice will have its own subdirectory in output_dir named by slice name. 
 
 #### Description
 
-Compute discrete Morse graph reconstruction for each 2D slice.  Graphs are intersected with the DM++ binary outputs to remove false positives.
+Run discrete Morse graph reconstruction on each likelihood image within input_path directory. Traditionally, the algorithm has one parameter - a persistence threshold.  The higher the threshold the more simplified the output.  However, due to the natural of the data, we allow for 2 different persistence threshold - a negative (ve) threshold and a positive (et) threshold to allow for different threshold of negative features (connected components) and positive features (loops) in the graph.  Applying the binary segmentation output to the morse graphs gives output graphs that lie only in regions where neuronal process is detected.
 
 #### Input
 - input_path - directory containing results for each slice.  This should be the same as output_dir in a DiMo2d.compute_persistence_single_channel call
@@ -124,7 +124,7 @@ Morse Graph for each image with specified persistence thresholds
 
 #### Description
 
-Apply haircut to remove non-degree 2 paths with a node of degree 1 that change direction at most once
+This function further postprocesses the graphs of each image to better capture the individual neuron fragments in each plane.  Specifically, be nature of masking the DM graphs with the binary segmentation outputs, the graphs will capture the fragments but have additional "hairs" - straight line paths to leaves off of the actual fragments.  This function will remove the erroneous extra branches from the true neuron fragments.
 
 #### Input
 - input_path - directory containing results for each slice.  This should be the same as input_path in a DiMo2d.generate_morse_graphs call.
@@ -151,7 +151,7 @@ Perform postprocessing of graph at specified thresholds of each image.
 
 #### Description
 
-Format graphs of each slice to geojson and ready to post to CSHL webviewer
+For datasets that have been posted to CSHL brain viewer (http://www.braincircuits.org/viewer4/mouse/map/2293), results can be posted to web and overlaid on top of original data and segmentation result.  This function produces a geojson file of each graph that if moved to the appropriate directory can be visualized by the viewer.
 
 ####	Input
 
@@ -184,7 +184,7 @@ Geojson ready to be posted to CSHL webviewer is written for each slice
 
 #### Description
 
-Output single vtp file containing morse graphs of all slices
+Convert .txt format graph (vert file and edge file) to .vtp format. Through the package, DM graphs are outputted as two .txt files - a text file for vertices and a text file for edges. Different formatting is required to visualize graphs in 3rd party software. This function will output a .vtp file for the specified input graph. .vtp can be viewed in softwares such as Paraview.
 
 #### Input
 
@@ -218,8 +218,7 @@ Example:
 ### Dipha Persistence Program (code/dipha-2d-thresh/build/dipha)
 
 #### Description
-
-Compute persistence diagram of likelihood image (only on regions with greater pixel value than 31, the likelihood minimum).  The program is a modified version of the code found at (https://github.com/DIPHA/dipha).
+The first step of the DM graph reconstruction algorithm is to compute persistence on the so called lower star filtration of the input triangulation with respect to the density function. This package uses the state of the art DIPHA persistence program for this step. The program is a modified version of the code found at (https://github.com/DIPHA/dipha) that is meant to explicitly take 2D data, compute persistence on regions of an image with > 31 pixel value - the minimal likelihood pixel value assigned by DM++ - and output all of the persistence information needed for the DM graph reconstruction algorithm.
 
 #### Python Function
 
@@ -242,7 +241,7 @@ Binary file (edge_filename) contained persistence information for all edges
 
 #### Description
 
-Executes discrete Morse graph reconstruction algorithm
+After computing persistence of the edges in the domain, the DM algorithm uses the persistence information to build an appropriate spanning forest and extracts the stable 1-manifolds (mountain ridges) on top of the spanning forest. The program takes a list of vertices in the domain and a file containing the persistence information computed by DIPHA.
 
 #### Python Function
 
@@ -270,7 +269,7 @@ The following matlab scripts were taken from (https://github.com/DIPHA/dipha).
 
 #### Description
 
-Creates DIPHA input file for all likelihood images
+Creates DIPHA input file for all subregions. The DIPHA program takes a specifically formatted input file. The authors of DIPHA included a script for generating such file for imaging data. This is the same script.
 
 #### Python Function
 
@@ -290,7 +289,7 @@ DIPHA input file for an image
 
 #### Description
 
-Converts DIPHA persistence diagram to .txt format for use by Discrete Morse Graph Reconstruction program
+Converts DIPHA persistence diagram to .txt format for use by Discrete Morse Graph Reconstruction program. The DIPHA program includes a matlab function to read in binary output file of program to visualize persistence diagram. This matlab function is a modified version meant to convert the dipha output of a likelihood image into a usable format for the DM-graph reconstruction program.
 
 #### Python Function
 		
