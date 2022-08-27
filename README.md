@@ -331,4 +331,4 @@ Persistence Diagram in .txt format for each likelihood image
 
 ## Test Data
 
-Included in the data folder is are two directorys - one containing the likelihood images and the other containing the binary segmentation images of DM++ on two PMD 1229 slice.  Results can be viewed here (http://www.braincircuits.org/viewer4/mouse/map/2293).  The slices included are 0156 and 0156.
+Included in the data folder is are two directorys - one containing the likelihood images and the other containing the binary segmentation images of DM++ on two PMD 1229 slice.  Results can be viewed here (http://www.braincircuits.org/viewer4/mouse/map/2293).  The slices included are 0156 and 0157.
