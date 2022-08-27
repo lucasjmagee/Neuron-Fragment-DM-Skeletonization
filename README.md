@@ -92,8 +92,6 @@ Each 2D slice will have its own subdirectory in output_dir named by slice name. 
     > morse_dir = “results/likelihood-morse/”
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     
-![Morse Example](images/morse-example.png)
-    
 ![DiMo2d.compute_persistence_single_channel](images/compute-persistence-single-channel.png)
 
 ### DiMo2d.generate_morse_graphs(input_path, binary_dir, ve_persistence_threshold=0, et_persistence_threshold=64,  threads=1)
@@ -121,8 +119,10 @@ Morse Graph for each image with specified persistence thresholds
     > morse_dir = “results/likelihood-morse/”
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     > dm.generate_morse_graphs(morse_dir, binary_dir, 0, 64)
-    
+
 ![DiMo2d.generate_morse_graphs](images/generate-morse-graphs.png)
+
+![Morse Example](images/morse-example.png)
 
 ### DiMo2d.postprocess_graphs(input_path, ve_persistence_threshold=0, et_persistence_threshold=64, threads=1)
 
@@ -150,6 +150,8 @@ Perform postprocessing of graph at specified thresholds of each image.
     > dm.postprocess_graphs(morse_dir, 0, 64)
     
 ![DiMo2d.postprocess_graphs](images/postprocess-graphs.png)
+
+![Postprocess Example](images/postprocess-example.png)
 
 ### DiMo2d.cshl_post_results(input_path, output_dir, ve_persistence_threshold=0, et_persistence_threshold=64, threads=1)
 
