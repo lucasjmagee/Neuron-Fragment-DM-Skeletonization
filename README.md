@@ -186,6 +186,8 @@ Geojson ready to be posted to CSHL webviewer is written for each slice
     
 ![DiMo2d.cshl_post_results](images/post-results.png)
 
+![Postprocess Example](images/postprocess-example.png)
+
 ### DiMo2d.write_vtp_graph(input_dir, output_filename, ve_persistence_threshold=0, et_persistence_threshold=64)
 
 #### Description
