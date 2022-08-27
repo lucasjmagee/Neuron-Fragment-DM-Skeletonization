@@ -221,6 +221,8 @@ Example:
 
 ![VTP](images/vtp.png)
 
+![VTP Example](images/vtp-example.png)
+
 ## Separate Programs
 
 ### Dipha Persistence Program (code/dipha-2d-thresh/build/dipha)
