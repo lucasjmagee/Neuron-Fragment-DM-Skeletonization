@@ -92,6 +92,8 @@ Each 2D slice will have its own subdirectory in output_dir named by slice name. 
     > morse_dir = “results/likelihood-morse/”
     > dm.compute_persistence_single_channel(likelihood_dir, morse_dir)
     
+![Morse Example](images/morse-example.png)
+    
 ![DiMo2d.compute_persistence_single_channel](images/compute-persistence-single-channel.png)
 
 ### DiMo2d.generate_morse_graphs(input_path, binary_dir, ve_persistence_threshold=0, et_persistence_threshold=64,  threads=1)
