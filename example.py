@@ -12,8 +12,10 @@ def test_2d_func():
     et_thresh = 64
 
     threads = 1
+    bit_depth = 8
+    background_pixel_val = 31
 
-    DiMo2d.compute_persistence_single_channel(likelihood_dir, morse_dir, threads)
+    DiMo2d.compute_persistence_single_channel(likelihood_dir, morse_dir, threads, bit_depth, background_pixel_val)
     DiMo2d.generate_morse_graphs(morse_dir, binary_dir, ve_thresh, et_thresh, threads)
     DiMo2d.postprocess_graphs(morse_dir, ve_thresh, et_thresh, threads)
     DiMo2d.cshl_post_results(morse_dir, json_dir, ve_thresh, et_thresh, threads)

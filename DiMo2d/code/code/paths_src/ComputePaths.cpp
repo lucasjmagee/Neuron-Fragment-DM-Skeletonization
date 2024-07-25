@@ -127,7 +127,6 @@ void dfs(unordered_set<int> &used, vector<vector<iipair>> &edgelist, int temp,
 
 
 vector<path> get_paths() {
-
 	int n = new_vertices.size();
 	//cout << "new verts: " << n << endl;
 	//cout << "t1" << endl;
@@ -175,6 +174,7 @@ vector<path> get_paths() {
 			rets.insert(rets.end(), paths.begin(), paths.end());
 		}
 	}
+
 	//cout << "t4" << endl;
 	return rets;
 }

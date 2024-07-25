@@ -72,7 +72,7 @@ def cshl_jp2_to_tif(input_dir, output_dir, threads=1):
 
 def __single_split_tif_channels(input_dir, output_dir, image_filename):
     input_path = os.path.join(input_dir, image_filename)
-    image = mpimg.imread(input_path)
+    image = cv2.imread(input_path, -1)
     red_channel = image[:, :, 2]
     green_channel = image[:, :, 1]
 
@@ -109,66 +109,65 @@ def split_tif_channels(input_dir, output_dir, threads=1):
         pool.join()
 
 
-def __single_crop_channel(channel_dir, crop_dir, image_filename):
+def __single_crop_channel(channel_dir, crop_dir, background_pixel_val, image_filename):
     input_filename = os.path.join(channel_dir, image_filename)
     image_output_dir = os.path.join(crop_dir, os.path.splitext(image_filename)[0]) + '/'
     # print(image_output_dir)
     crop_filename = os.path.join(image_output_dir, 'crop.txt')
     cropped_filename = os.path.join(image_output_dir, 'image.tif')
     # print(cropped_filename)
-
-    image = mpimg.imread(input_filename)\
-    # print('cropping')
+    image = cv2.imread(input_filename, -1)
     x, y = np.nonzero(image)
 
     # print('check:', len(x), len(y))
     if len(x) == len(y) == 0:
         return
-
-
-    if np.max(image) == 31:
+    
+    if np.max(image) == background_pixel_val:
         return
 
     if not os.path.exists(image_output_dir):
         os.mkdir(image_output_dir)
 
-    #print('cropping')
     xl, xr = x.min(), x.max()
     yl, yr = y.min(), y.max()
-    cropped = image[xl - 1:xr + 2, yl - 1:yr + 2]
-
+    crop_left, crop_right, crop_top, crop_bottom = max(xl - 1, 0), min(xr+2,image.shape[0]), max(yl-1, 0), min(yr+2, image.shape[1])
+    print(crop_left, crop_right, crop_top, crop_bottom)
+    cropped = image[crop_left:crop_right, crop_top:crop_bottom]
     #print('outputting')
     cv2.imwrite(cropped_filename, cropped)
 
     with open(crop_filename, 'w') as crop_file:
-        crop_file.write(str(xl - 1) + ' ' + str(xr + 2) + ' ' + str(yl - 1) + ' ' + str(yr + 2) + '\n')
+        crop_file.write(str(crop_left) + ' ' + str(crop_right) + ' ' + str(crop_top) + ' ' + str(crop_bottom) + '\n')
         crop_file.close()
 
 
-def crop_channel(channel_dir, crop_dir, threads=1):
+def crop_channel(channel_dir, crop_dir, background_pixel_val, threads=1):
     if not os.path.exists(crop_dir):
         os.mkdir(crop_dir)
 
     image_filenames = [listing for listing in os.listdir(channel_dir)]
     pool = Pool(threads)
-    pool.map(partial(__single_crop_channel, channel_dir, crop_dir), image_filenames)
+    pool.map(partial(__single_crop_channel, channel_dir, crop_dir, background_pixel_val), image_filenames)
     pool.close()
     pool.join()
 
 
-def __single_write_dipha_input_file(cropped_dir):
+def __single_write_dipha_input_file(bit_depth, cropped_dir):
     input_filename = os.path.join(cropped_dir, 'image.tif')
     dipha_output_filename = os.path.join(cropped_dir, 'dipha.input')
-    os.system("matlab -nosplash -nodisplay -nodesktop -r \'save_image_data(\"" + input_filename + "\",\"" + dipha_output_filename + "\"); quit;\'")
+    max_pixel_val = ((2 ** bit_depth) - 1)
+
+    os.system("matlab -nosplash -nodisplay -nodesktop -r \'save_image_data(\"" + input_filename + "\",\"" + dipha_output_filename + "\",\"" + str(max_pixel_val) + "\"); quit;\'")
 
 
-def write_dipha_input_files(input_dir, threads=1):
+def write_dipha_input_files(input_dir, bit_depth, threads=1):
 
     cropped_image_dirs = [os.path.join(input_dir, listing) for listing in os.listdir(input_dir)]
     cropped_image_dirs.sort()
 
     pool = Pool(threads)
-    pool.map(__single_write_dipha_input_file, cropped_image_dirs)
+    pool.map(partial(__single_write_dipha_input_file, bit_depth), cropped_image_dirs)
     pool.close()
     pool.join()
 
@@ -177,7 +176,7 @@ def __single_write_vertex_file(cropped_dir):
     input_filename = os.path.join(cropped_dir, 'image.tif')
     vert_filename = os.path.join(cropped_dir, 'vert.txt')
 
-    image = mpimg.imread(input_filename)
+    image = cv2.imread(input_filename, -1)
     nx, ny = image.shape
 
     # print('writing vert file')
@@ -199,31 +198,33 @@ def write_vertex_files(input_dir, threads=1):
     pool.join()
 
 
-def __single_run_dipha_persistence(cropped_dir, mpi_threads=1):
+def __single_run_dipha_persistence(pixel_threshold, cropped_dir, mpi_threads=1):
     input_filename = os.path.join(cropped_dir, 'image.tif')
     dipha_output_filename = os.path.join(cropped_dir, 'dipha.input')
     diagram_filename = os.path.join(cropped_dir, 'diagram.bin')
     dipha_edge_filename = os.path.join(cropped_dir, 'dipha-thresh.edges')
 
-    image = mpimg.imread(input_filename)
+    image = cv2.imread(input_filename, -1)
     nx, ny = image.shape
 
     command = 'mpiexec -n ' + str(
-        mpi_threads) + ' ./DiMo2d/code/dipha-2d-thresh/build/dipha --upper_dim 2 ' + dipha_output_filename + ' ' + diagram_filename + ' ' + dipha_edge_filename + ' ' + str(
+        mpi_threads) + f' ./DiMo2d/code/dipha-2d-thresh/build/dipha --upper_dim 2 --pixel_threshold {pixel_threshold} ' + dipha_output_filename + ' ' + diagram_filename + ' ' + dipha_edge_filename + ' ' + str(
         nx) + ' ' + str(ny)
     # command = 'mpiexec -n 32 ../dipha/dipha-graph-recon/build/dipha --upper_dim 2 dipha/neuron1-smaller/complex.bin dipha/neuron1-smaller/persistence.diagram dipha/neuron1-smaller/dipha.edges 235 248 251'
     os.system(command)
 
 
-def run_dipha_persistence(input_dir, threads=1):
+def run_dipha_persistence(input_dir, bit_depth, background_pixel_val, threads=1):
 
     #print(input_dir)
     cropped_image_dirs = [os.path.join(input_dir, listing) for listing in os.listdir(input_dir)]
     cropped_image_dirs.sort()
     #print(cropped_image_dirs)
 
+    pixel_threshold = (((2**bit_depth)-1) - background_pixel_val)
+
     pool = Pool(threads)
-    pool.map(partial(__single_run_dipha_persistence), cropped_image_dirs)
+    pool.map(partial(__single_run_dipha_persistence, pixel_threshold), cropped_image_dirs)
     pool.close()
     pool.join()
 
@@ -245,10 +246,10 @@ def convert_persistence_diagrams(input_dir, threads=1):
     pool.join()
 
 
-def compute_persistence_single_channel(input_dir, output_dir, threads=1):
-    crop_channel(input_dir, output_dir, threads)
-    write_dipha_input_files(output_dir, threads)
-    run_dipha_persistence(output_dir, threads)
+def compute_persistence_single_channel(input_dir, output_dir, threads=1, bit_depth=8, background_pixel_val=31):
+    crop_channel(input_dir, output_dir, background_pixel_val, threads)
+    write_dipha_input_files(output_dir, bit_depth, threads)
+    run_dipha_persistence(output_dir, bit_depth, background_pixel_val, threads)
     convert_persistence_diagrams(output_dir, threads)
     write_vertex_files(output_dir, threads)
 
@@ -326,7 +327,7 @@ def __single_intersect_morse_graph_with_binary_output(input_dir, binary_dir, ve_
     crossed_edge_filename = os.path.join(image_output_dir, 'crossed-edge.txt')
 
     # print('reading binary')
-    binary = mpimg.imread(binary_process)
+    binary = cv2.imread(binary_process, -1)
 
     # print('reading verts')
     verts = []
@@ -451,8 +452,8 @@ def non_degree_2_paths(input_dir, ve_persistence_threshold=0, et_persistence_thr
 def __single_haircut(input_dir, ve_persistence_threshold, et_persistence_threshold, image_filename):
     image_output_dir = os.path.join(input_dir, os.path.splitext(image_filename)[0]) \
                        + '/' + str(ve_persistence_threshold) + '_' + str(et_persistence_threshold) + '/'
-    # vert_filename = os.path.join(image_output_dir, 'crossed-vert.txt')
-    vert_filename = os.path.join(image_output_dir, 'dimo_vert.txt')
+    vert_filename = os.path.join(image_output_dir, 'crossed-vert.txt')
+    # vert_filename = os.path.join(image_output_dir, 'dimo_vert.txt')
     paths_filename = os.path.join(image_output_dir, 'paths.txt')
     # sobel_filename = os.path.join(input_dir, os.path.splitext(image_filename)[0] + '/sobel-100.tif')
     output_edge_filename = os.path.join(image_output_dir, 'haircut-edge.txt')
