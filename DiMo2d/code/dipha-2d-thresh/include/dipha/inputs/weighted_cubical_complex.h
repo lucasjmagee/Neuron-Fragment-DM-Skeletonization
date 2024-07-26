@@ -64,6 +64,18 @@ namespace dipha
         return cell_dim;
       }
 
+      double _get_minimum_face_value(int64_t idx) const
+      {
+        std::vector< double > min_list;
+        min_list.push_back(_get_local_value(idx));
+        std::vector< int64_t > boundary;
+        _get_local_boundary(idx, boundary);
+        for (const auto& element : boundary) {
+          min_list.push_back(_get_local_value(element));
+        }
+        return *std::min_element(min_list.begin(), min_list.end());
+      }
+
       double _get_local_value(int64_t idx) const
       {
         static std::vector< int64_t > temp_tuple;

@@ -390,7 +390,7 @@ def __single_remove_duplicate_edges(input_dir, ve_persistence_threshold, et_pers
     image_output_dir = os.path.join(input_dir, os.path.splitext(image_filename)[0]) \
                        + '/' + str(ve_persistence_threshold) + '_' + str(
         et_persistence_threshold) + '/'
-    input_filename = os.path.join(image_output_dir, 'dimo_edge.txt')
+    input_filename = os.path.join(image_output_dir, 'crossed-edge.txt')
     output_filename = os.path.join(image_output_dir, 'no-dup-crossed-edge.txt')
 
     edges = set()
@@ -466,9 +466,13 @@ def __single_haircut(input_dir, ve_persistence_threshold, et_persistence_thresho
         vert_file.close()
     print(len(verts), 'verts')
     print('reading paths')
-    with open(paths_filename, 'r') as paths_file:
-        content = paths_file.readlines()
-        paths_file.close()
+    try:
+        with open(paths_filename, 'r') as paths_file:
+            content = paths_file.readlines()
+            paths_file.close()
+    except FileNotFoundError:
+        print('No Paths in Image')
+        return
 
     paths = [c.strip().split(' ') for c in content]
     paths = [[int(n) for n in c] for c in paths]

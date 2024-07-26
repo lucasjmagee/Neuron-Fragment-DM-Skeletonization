@@ -19,7 +19,7 @@
 
 function save_image_data( input_filename, filename, max_pixel_value )
     %% open file for reading
-    data = max_pixel_value - imread(input_filename);
+    data = str2num(max_pixel_value) - imread(input_filename);
     
     %% open file for writing
     fid = fopen( filename, 'w' );

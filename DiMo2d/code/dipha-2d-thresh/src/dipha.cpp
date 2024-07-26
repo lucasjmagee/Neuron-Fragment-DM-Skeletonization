@@ -35,8 +35,8 @@ void print_help_and_exit()
   MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
 }
 
-void parse_command_line(int argc, char** argv, bool& benchmark, bool& dualize, int64_t& upper_dim, std::string& input_filename, 
-                        std::string& output_filename, std::string& edge_filename, int64_t& nx, int64_t& ny)
+void parse_command_line(int argc, char** argv, bool& benchmark, bool& dualize, int64_t& upper_dim, int64_t& pixel_threshold,
+                        std::string& input_filename, std::string& output_filename, std::string& edge_filename, int64_t& nx, int64_t& ny)
 {
 
   std::cout << "argc: " << argc << std::endl;
@@ -147,7 +147,8 @@ int main(int argc, char** argv)
   bool benchmark = false; // print timings / info
   bool dualize = false; // primal / dual computation toggle
   int64_t upper_dim = std::numeric_limits< int64_t >::max();
-  parse_command_line(argc, argv, benchmark, dualize, upper_dim, input_filename, output_filename, edge_filename, nx, ny);
+  int64_t pixel_threshold = 0;
+  parse_command_line(argc, argv, benchmark, dualize, upper_dim, pixel_threshold, input_filename, output_filename, edge_filename, nx, ny);
 
   //std::cout << "Check 2: " << nx << ' ' << ny << ' ' << nz << std::endl;
 
