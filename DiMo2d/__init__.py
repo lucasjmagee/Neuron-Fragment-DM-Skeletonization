@@ -132,7 +132,6 @@ def __single_crop_channel(channel_dir, crop_dir, background_pixel_val, image_fil
     xl, xr = x.min(), x.max()
     yl, yr = y.min(), y.max()
     crop_left, crop_right, crop_top, crop_bottom = max(xl - 1, 0), min(xr+2,image.shape[0]), max(yl-1, 0), min(yr+2, image.shape[1])
-    print(crop_left, crop_right, crop_top, crop_bottom)
     cropped = image[crop_left:crop_right, crop_top:crop_bottom]
     #print('outputting')
     cv2.imwrite(cropped_filename, cropped)
