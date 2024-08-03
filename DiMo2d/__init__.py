@@ -690,7 +690,7 @@ def __single_convert_morse_graphs_to_geojson(input_dir, ve_persistence_threshold
     # cloud_file = ''
 
     file_vert = os.path.join(image_output_dir, 'json-vert.txt')
-    file_edge = os.path.join(image_output_dir, 'haircut-edge.txt')
+    file_edge = os.path.join(image_output_dir, 'no-dup-crossed-edge.txt')
     dir_name = os.path.dirname(file_vert)
     z_range = 1
     length, width = 24000, 24000
@@ -766,8 +766,8 @@ def write_vtp_graph(input_dir, output_filename, ve_persistence_threshold=0, et_p
                            + '/' + str(ve_persistence_threshold) + '_' + str(et_persistence_threshold) + '/'
 
         # pts.InsertNextPoint(int(row[1]), NX - int(row[0]), plane_count)
-        vert_filename = os.path.join(image_output_dir, 'haircut-vert.txt')
-        edge_filename = os.path.join(image_output_dir, 'haircut-edge.txt')
+        vert_filename = os.path.join(image_output_dir, 'crossed-vert.txt')
+        edge_filename = os.path.join(image_output_dir, 'no-dup-crossed-edge.txt')
 
         local_count = 0
 
