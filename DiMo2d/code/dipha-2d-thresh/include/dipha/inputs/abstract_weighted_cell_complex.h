@@ -51,6 +51,12 @@ namespace dipha
         return derived()._get_local_dim(idx);
       }
 
+      double get_minimum_face_value(int64_t idx) const {
+        assert(idx >= element_distribution::get_local_begin(get_num_cells()) 
+               && idx < element_distribution::get_local_end(get_num_cells()));
+        return derived()._get_minimum_face_value(idx);
+      }
+
       // value of given cell
       double get_local_value(int64_t idx) const
       {

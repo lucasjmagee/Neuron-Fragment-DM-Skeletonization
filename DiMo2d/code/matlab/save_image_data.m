@@ -17,9 +17,9 @@
 %  You should have received a copy of the GNU Lesser General Public License
 %  along with DIPHA.  If not, see <http://www.gnu.org/licenses/>.
 
-function save_image_data( input_filename, filename )
+function save_image_data( input_filename, filename, max_pixel_value )
     %% open file for reading
-    data = 255 - imread(input_filename);
+    data = str2num(max_pixel_value) - imread(input_filename);
     
     %% open file for writing
     fid = fopen( filename, 'w' );

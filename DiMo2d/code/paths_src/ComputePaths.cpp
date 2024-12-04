@@ -127,7 +127,6 @@ void dfs(unordered_set<int> &used, vector<vector<iipair>> &edgelist, int temp,
 
 
 vector<path> get_paths() {
-
 	int n = new_vertices.size();
 	//cout << "new verts: " << n << endl;
 	//cout << "t1" << endl;
@@ -175,6 +174,7 @@ vector<path> get_paths() {
 			rets.insert(rets.end(), paths.begin(), paths.end());
 		}
 	}
+
 	//cout << "t4" << endl;
 	return rets;
 }
@@ -184,8 +184,8 @@ int main(int argc, char **argv) {
 		//string directory = "../stp_numbered/result/" + to_string(i) + "/";
 		string directory = argv[1];
 		cout << "working on " << directory << endl;
-		//string vfile_path = directory + "crossed-vert.txt", efile_path = directory + "no-dup-crossed-edge.txt"; // input file paths. path to vertice, edge files.
-		string vfile_path = directory + "dimo_vert.txt", efile_path = directory + "no-dup-crossed-edge.txt"; // input file paths. path to vertice, edge files.
+		string vfile_path = directory + "crossed-vert.txt", efile_path = directory + "no-dup-crossed-edge.txt"; // input file paths. path to vertice, edge files.
+		// string vfile_path = directory + "dimo_vert.txt", efile_path = directory + "no-dup-crossed-edge.txt"; // input file paths. path to vertice, edge files.
 		string oefile_path = directory + "paths.txt";
 		ReadInEdge(vfile_path, efile_path);
 		cout << "We have " << new_vertices.size() << " vertices, and "

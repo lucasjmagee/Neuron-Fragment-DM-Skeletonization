@@ -29,11 +29,12 @@ namespace dipha
     void compute_reduced_columns(const inputs::abstract_weighted_cell_complex<Complex>& complex,
                                  bool dualize,
                                  int64_t upper_dim,
+                                 int64_t pixel_threshold,
                                  data_structures::distributed_vector<int64_t>& filtration_to_cell_map,
                                  data_structures::write_once_column_array& reduced_columns)
     {
       std::cout << "computing reduced columns" << std::endl;
-      DIPHA_MACROS_BENCHMARK(get_filtration_to_cell_map(complex, dualize, filtration_to_cell_map); );
+      DIPHA_MACROS_BENCHMARK(get_filtration_to_cell_map(complex, dualize, pixel_threshold, filtration_to_cell_map); );
       std::cout << "filtration to cell map" << std::endl;
       data_structures::distributed_vector<int64_t> cell_to_filtration_map;
       DIPHA_MACROS_BENCHMARK(get_cell_to_filtration_map(complex.get_num_cells(), filtration_to_cell_map, cell_to_filtration_map); );

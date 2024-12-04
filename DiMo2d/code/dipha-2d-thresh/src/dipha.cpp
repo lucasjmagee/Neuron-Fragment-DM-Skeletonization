@@ -30,11 +30,13 @@ void print_help_and_exit()
   std::cerr << "--dual    --  use dualization" << std::endl;
   std::cerr << "--upper_dim N   --  maximal dimension to compute" << std::endl;
   std::cerr << "--benchmark --  prints timing info" << std::endl;
+  /* Added for Neuron Fragment Application */
+  std::cerr << "--pixel_threshold   --  thresholding value above which we ignore the image" << std::endl;
   MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
 }
 
-void parse_command_line(int argc, char** argv, bool& benchmark, bool& dualize, int64_t& upper_dim, std::string& input_filename, 
-                        std::string& output_filename, std::string& edge_filename, int64_t& nx, int64_t& ny)
+void parse_command_line(int argc, char** argv, bool& benchmark, bool& dualize, int64_t& upper_dim, int64_t& pixel_threshold,
+                        std::string& input_filename, std::string& output_filename, std::string& edge_filename, int64_t& nx, int64_t& ny)
 {
 
   std::cout << "argc: " << argc << std::endl;
@@ -75,12 +77,23 @@ void parse_command_line(int argc, char** argv, bool& benchmark, bool& dualize, i
       if (pos_last_digit != parameter.size())
         print_help_and_exit();
     }
+    else if (option == "--pixel_threshold")
+    {
+      idx++;
+      if (idx >= argc - 2)
+        print_help_and_exit();
+      std::string parameter = std::string(argv[idx]);
+      size_t pos_last_digit;
+      pixel_threshold = std::stoll(parameter, &pos_last_digit);
+      if (pos_last_digit != parameter.size())
+        print_help_and_exit();
+    }
     else print_help_and_exit();
   }
 }
 
 template< typename Complex >
-void compute(const std::string& input_filename, bool dualize, int64_t upper_dim, const std::string& output_filename, const std::string& edge_filename, int64_t nx, int64_t ny)
+void compute(const std::string& input_filename, bool dualize, int64_t upper_dim, int64_t pixel_threshold, const std::string& output_filename, const std::string& edge_filename, int64_t nx, int64_t ny)
 {
   Complex complex;
 
@@ -99,7 +112,7 @@ void compute(const std::string& input_filename, bool dualize, int64_t upper_dim,
   dipha::data_structures::write_once_column_array reduced_columns;
 
   start = std::chrono::steady_clock::now();
-  dipha::algorithms::compute_reduced_columns(complex, dualize, upper_dim, filtration_to_cell_map, reduced_columns);
+  dipha::algorithms::compute_reduced_columns(complex, dualize, upper_dim, pixel_threshold, filtration_to_cell_map, reduced_columns);
   end = std::chrono::steady_clock::now();
   std::cout << "total persistence elapsed time in seconds: "
         << std::chrono::duration_cast<std::chrono::seconds>(end - start).count()
@@ -134,7 +147,8 @@ int main(int argc, char** argv)
   bool benchmark = false; // print timings / info
   bool dualize = false; // primal / dual computation toggle
   int64_t upper_dim = std::numeric_limits< int64_t >::max();
-  parse_command_line(argc, argv, benchmark, dualize, upper_dim, input_filename, output_filename, edge_filename, nx, ny);
+  int64_t pixel_threshold = 0;
+  parse_command_line(argc, argv, benchmark, dualize, upper_dim, pixel_threshold, input_filename, output_filename, edge_filename, nx, ny);
 
   //std::cout << "Check 2: " << nx << ' ' << ny << ' ' << nz << std::endl;
 
@@ -158,7 +172,7 @@ int main(int argc, char** argv)
   switch (dipha::file_types::get_file_type(input_filename))
   {
   case dipha::file_types::IMAGE_DATA:
-    compute< dipha::inputs::weighted_cubical_complex >(input_filename, dualize, upper_dim, output_filename, edge_filename, nx, ny);
+    compute< dipha::inputs::weighted_cubical_complex >(input_filename, dualize, upper_dim, pixel_threshold, output_filename, edge_filename, nx, ny);
     break;
   default:
     dipha::mpi_utils::error_printer_if_root() << "Unknown complex type in DIPHA file" << input_filename << std::endl;

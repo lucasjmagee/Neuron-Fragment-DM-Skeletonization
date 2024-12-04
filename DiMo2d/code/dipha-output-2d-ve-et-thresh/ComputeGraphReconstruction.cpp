@@ -5,8 +5,10 @@
 #include <iostream>
 #include <queue>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
+
 
 vector<int> bfs(int vert, int &branch_min, vector<int> vert_arr[], bool visited[], const vector<int> neighborhoods[], int pre[]){
 			clock_t d_start = clock();
@@ -121,7 +123,7 @@ int main(int argc, char* argv[])
 		vert.clear();
 		vert.push_back(x);
 		vert.push_back(y);
-		vert.push_back(f);
+		vert.push_back(-f);
 		verts.push_back(vert);
         }
         fin.close();
@@ -422,6 +424,23 @@ int main(int argc, char* argv[])
                 vector<int> edge = output_edges[i];
                 //cout << edge[0] << " " << edge[1] << endl;
                 eFile << edge[0] << " " << edge[1] << endl;
+        }
+
+        string vpath_filename = output_dir + "vpath.txt";
+        ofstream v2File(vpath_filename.c_str());
+        for (int i = 0; i < manifold.size(); i++)
+        {
+                //cout << "manifold type check: " << manifold_type[i] << endl;
+                // if (manifold_type[i] != -1)
+                // {
+                // continue;
+                // }
+                vector<int> component = manifold[i];
+                for (int j = 0; j < component.size() - 1; j++)
+                        {
+                        v2File << component[j] << " ";
+                        }
+                        v2File << component[component.size() - 1] << endl;
         }
 
         return 0;
